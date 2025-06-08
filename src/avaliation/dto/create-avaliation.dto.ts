@@ -21,7 +21,7 @@ export class CreateAvaliationDto {
 
     @IsNotEmpty()
     @IsNumber()
-    fk_user_id: number;
+    user_id: number;
 
     @IsDateString()
     created_at?: Date;

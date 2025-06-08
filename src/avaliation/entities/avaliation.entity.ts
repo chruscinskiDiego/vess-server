@@ -5,7 +5,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 't
 export class Avaliation {
 
     @PrimaryGeneratedColumn()
-    id_avaliation: number;
+    id_avaliation?: number;
 
     @Column({ type: 'varchar', length: 255, nullable: false })
     description: string;
