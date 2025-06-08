@@ -8,6 +8,8 @@ import { SampleAvaliationModule } from './sample_avaliation/sample_avaliation.mo
 import { SampleLayersModule } from './sample_layers/sample_layers.module';
 import { SampleLocationModule } from './sample_location/sample_location.module';
 import { ConfigModule } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
+import { LogsModule } from './login_logs/login-logs.module';
 
 @Module({
   imports: [
@@ -27,13 +29,22 @@ import { ConfigModule } from '@nestjs/config';
       autoLoadEntities: true,
       synchronize: true,  // apenas em dev
     }),
+    MongooseModule.forRoot(
+      // string de conexão ao Mongo rodando no Docker
+      `mongodb://${process.env.MONGO_COMPOSE_USERNAME}` +
+      `:${process.env.MONGO_COMPOSE_PASSWORD}` +
+      `@localhost:${process.env.MONGO_COMPOSE_PORTS!.split(':')[0]}` +
+      `/${process.env.MONGO_COMPOSE_DATABASE}` +
+      `?authSource=admin`
+    ),
     UserConfigModule,
     AvaliationModule,
     SampleAvaliationModule,
     SampleLayersModule,
     SampleLocationModule,
+    LogsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

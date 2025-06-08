@@ -1,14 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { AvaliationService } from './avaliation.service';
 import { CreateAvaliationDto } from './dto/create-avaliation.dto';
 import { UpdateAvaliationDto } from './dto/update-avaliation.dto';
+import { AuthTokenGuard } from 'src/auth/guards/auth-token.guard';
 
+@UseGuards(AuthTokenGuard)
 @Controller('avaliation')
 export class AvaliationController {
   constructor(private readonly avaliationService: AvaliationService) {}
 
   @Post()
-  create(@Body() createAvaliationDto: CreateAvaliationDto) {
+  async create(@Body() createAvaliationDto: CreateAvaliationDto) {
     return this.avaliationService.createAvaliation(createAvaliationDto);
   }
 

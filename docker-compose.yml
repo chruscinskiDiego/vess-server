@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   postgres:
     image: postgres:latest
@@ -11,5 +13,18 @@ services:
     volumes:
       - polls_pg_data:/var/lib/postgresql/data
 
+  mongodb:
+    image: mongo:6.0
+    ports:
+      - ${MONGO_COMPOSE_PORTS}
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGO_COMPOSE_DATABASE}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_COMPOSE_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_COMPOSE_PASSWORD}
+      TZ: America/Sao_PauloMONGO_COMPOSE_DATABASE
+    volumes:
+      - polls_mongo_data:/data/db
+
 volumes:
   polls_pg_data:
+  polls_mongo_data:

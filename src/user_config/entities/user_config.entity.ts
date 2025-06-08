@@ -13,7 +13,7 @@ export class UserConfig {
     @Column({ type: 'varchar', length: 100, nullable: false, unique: true })
     email: string;
 
-    @Column({ type: 'varchar', length: 255, nullable: false, select: false })
+    @Column({ type: 'varchar', length: 255, nullable: false})
     password: string;
 
     @Column({ type: 'varchar', length: 100, nullable: false })
@@ -25,7 +25,10 @@ export class UserConfig {
     @Column({ type: 'varchar', length: 100, nullable: false })
     language: string;
 
-    @Column({ type: 'boolean', default: true, select: false })
+    @Column({ type: 'varchar', length: 100, nullable: false})
+    role: string;
+
+    @Column({ type: 'boolean', default: true })
     isActive: boolean;
 
 }
