@@ -16,5 +16,6 @@ import { AuthModule } from 'src/auth/auth.module';
   ],
   controllers: [AvaliationController],
   providers: [AvaliationService],
+  exports: [AvaliationService]
 })
 export class AvaliationModule {}

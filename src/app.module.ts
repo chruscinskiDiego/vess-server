@@ -10,6 +10,7 @@ import { SampleLocationModule } from './sample_location/sample_location.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { LogsModule } from './login_logs/login-logs.module';
+import { S3Module } from './s3/s3.module';
 
 @Module({
   imports: [
@@ -30,7 +31,6 @@ import { LogsModule } from './login_logs/login-logs.module';
       synchronize: true,  // apenas em dev
     }),
     MongooseModule.forRoot(
-      // string de conexão ao Mongo rodando no Docker
       `mongodb://${process.env.MONGO_COMPOSE_USERNAME}` +
       `:${process.env.MONGO_COMPOSE_PASSWORD}` +
       `@localhost:${process.env.MONGO_COMPOSE_PORTS!.split(':')[0]}` +
@@ -43,6 +43,7 @@ import { LogsModule } from './login_logs/login-logs.module';
     SampleLayersModule,
     SampleLocationModule,
     LogsModule,
+    S3Module
   ],
   controllers: [AppController],
   providers: [AppService],

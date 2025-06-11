@@ -26,6 +26,7 @@ export class AvaliationService {
       summary: createAvaliationDto.summary,
       infos: createAvaliationDto.infos,
       fk_id_user: createAvaliationDto.user_id,
+      file_link: '',
       created_at: new Date().toISOString(),
     };
 
@@ -41,7 +42,6 @@ export class AvaliationService {
         return {
           name: sample.name,
           num_layers: sample.num_layers,
-          file_link: sample.file_link,
           score: sample.score,
           sample_layers: sample.sample_layers,
           sample_location: sample.sample_location,
@@ -66,6 +66,24 @@ export class AvaliationService {
       throw error;
     }
 
+  }
+
+  async insertFileLinkInAvaliation (avaliationId:number, fileLink: string){
+
+    try{
+
+      await this.avaliationRepository
+      .createQueryBuilder()
+      .update(Avaliation)
+      .set({file_link: fileLink})
+      .where('id_avaliation = :id', {id: avaliationId})
+      .execute()
+      
+    }catch(error){
+
+      throw error;
+      
+    }
   }
 
   findAll() {

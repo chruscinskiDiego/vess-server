@@ -13,10 +13,6 @@ export class sampleAvaliationDto {
     num_layers: number;
 
     @IsNotEmpty()
-    @IsString()
-    file_link: string;
-
-    @IsNotEmpty()
     @IsNumber()
     score: number;
 

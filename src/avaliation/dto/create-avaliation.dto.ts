@@ -1,4 +1,4 @@
-import { IsArray, IsDate, IsDateString, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsArray, IsDate, IsDateString, IsEmpty, IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { sampleAvaliationDto } from "src/sample_avaliation/dto/create-sample_avaliation.dto";
 
 export class CreateAvaliationDto {
@@ -22,6 +22,9 @@ export class CreateAvaliationDto {
     @IsNotEmpty()
     @IsNumber()
     user_id: number;
+
+    @IsEmpty()
+    file_link: string;
 
     @IsDateString()
     created_at?: Date;

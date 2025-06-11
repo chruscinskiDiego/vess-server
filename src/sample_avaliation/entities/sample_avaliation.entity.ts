@@ -13,15 +13,11 @@ export class SampleAvaliation {
     @Column({ type: 'int', nullable: false })
     num_layers: number;
 
-    @Column({ type: 'varchar', length: 255, nullable: false })
-    file_link: string;
-
     @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
     score: number;
 
     @ManyToOne(() => Avaliation)
     @JoinColumn({ name: 'fk_id_avaliation' })
     fk_id_avaliation?: Avaliation;
-
 
 }

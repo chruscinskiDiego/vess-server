@@ -19,6 +19,9 @@ export class Avaliation {
     @Column({ type: 'text', nullable: false })
     infos: string;
 
+    @Column({ type: 'varchar', length: 255, nullable: false })
+    file_link: string;
+
     @Column({type: 'timestamp', nullable: false})
     created_at: Date;
 
