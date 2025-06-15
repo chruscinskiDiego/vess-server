@@ -39,21 +39,16 @@ export class SampleLocationService {
   }
 
   async findSampleLocationBySampleId(sampleId: number) {
-    
-    
-    const sampleLocation = await this.sampleLocationRepository.findOneBy({
-      fk_id_sample: sampleId as any
+    const sampleLocation = await this.sampleLocationRepository.findOne({
+      select: {
+        id_location: true,
+        latitude: true,
+        longitude: true,
+      },
+      where: { fk_id_sample: sampleId }
     });
 
     return sampleLocation;
-  }
-
-  findAll() {
-    return `This action returns all sampleLocation`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} sampleLocation`;
   }
 
 }

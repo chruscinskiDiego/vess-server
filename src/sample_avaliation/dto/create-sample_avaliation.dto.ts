@@ -16,9 +16,11 @@ export class sampleAvaliationDto {
     @IsNumber()
     fk_id_avaliation: number;
 
+    @IsNotEmpty()
     @IsArray()
     sample_layers: sampleLayerDto[];
 
+    @IsNotEmpty()
     @IsObject()
     sample_location: sampleLocationDto;
 

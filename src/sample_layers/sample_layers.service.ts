@@ -32,6 +32,11 @@ export class SampleLayersService {
     
     
     const sampleLayers = await this.sampleLayerRepository.find({
+      select: {
+        id_layer: true,
+        length: true,
+        note: true,
+      },
       where: {fk_id_sample: sampleId as any},
     });
 

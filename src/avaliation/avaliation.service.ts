@@ -1,9 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { CreateAvaliationDto } from './dto/create-avaliation.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Avaliation } from './entities/avaliation.entity';
 import { Repository } from 'typeorm';
 import { SampleAvaliationService } from 'src/sample_avaliation/sample_avaliation.service';
+import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 
 
 @Injectable()
@@ -17,7 +18,11 @@ export class AvaliationService {
 
   ) { }
 
-  async createAvaliation(createAvaliationDto: CreateAvaliationDto) {
+  async createAvaliation(createAvaliationDto: CreateAvaliationDto, tokenPayload: TokenPayloadDto) {
+
+    if(tokenPayload.sub !== createAvaliationDto.user_id){
+      throw new ForbiddenException('Você não pode criar avaliações para este usuário!');
+    }
 
     const avaliationDto: any= {
       description: createAvaliationDto.description,
@@ -85,7 +90,11 @@ export class AvaliationService {
     }
   }
 
-  async findAvaliationHistoryByUser(userId: number) {
+  async findAvaliationHistoryByUser(userId: number, tokenPayload: TokenPayloadDto) {
+
+    if(tokenPayload.sub !== userId){
+      throw new ForbiddenException('Você não tem permissão para ver as avaliações do usuário!');
+    }
 
     const avaliationHistory = await this.avaliationRepository
     .createQueryBuilder()
@@ -98,7 +107,7 @@ export class AvaliationService {
     }
   }
 
-  async findOneAvaliationById(AvaliationId: number) {
+  async findOneAvaliationById(AvaliationId: number, tokenPayload: TokenPayloadDto) {
    
     const avaliation = await this.avaliationRepository.findOneBy({
       id_avaliation: AvaliationId
@@ -108,10 +117,14 @@ export class AvaliationService {
       throw new BadRequestException('Avaliação não encontrada!');
     }
 
+    if(tokenPayload.sub !== (avaliation.fk_id_user as unknown as number)){
+      throw new ForbiddenException('Você não tem permissão para ver a avaliação do usuário!');
+    }
+
     const sampleAvaliations = await this.sampleAvaliationService.findAllSampleLayersByAvaliationId(AvaliationId);
 
     return {
-      avaliation,
+      ...avaliation,
       sampleAvaliations
     }
 
