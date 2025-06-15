@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateAvaliationDto } from './dto/create-avaliation.dto';
-import { UpdateAvaliationDto } from './dto/update-avaliation.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Avaliation } from './entities/avaliation.entity';
 import { Repository } from 'typeorm';
@@ -41,7 +40,7 @@ export class AvaliationService {
       const sampleAvaliationsDto = createAvaliationDto.sample_avaliation.map((sample) => {
         return {
           name: sample.name,
-          num_layers: sample.num_layers,
+          num_layers: sample.sample_layers.length,
           score: sample.score,
           sample_layers: sample.sample_layers,
           sample_location: sample.sample_location,
@@ -86,19 +85,36 @@ export class AvaliationService {
     }
   }
 
-  findAll() {
-    return `This action returns all avaliation`;
+  async findAvaliationHistoryByUser(userId: number) {
+
+    const avaliationHistory = await this.avaliationRepository
+    .createQueryBuilder()
+    .select('id_avaliation, description, summary')
+    .where('fk_user_id = :id', {id: userId})
+    .getRawMany()
+
+    return {
+      history: avaliationHistory
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} avaliation`;
+  async findOneAvaliationById(AvaliationId: number) {
+   
+    const avaliation = await this.avaliationRepository.findOneBy({
+      id_avaliation: AvaliationId
+    });
+
+    if(!avaliation){
+      throw new BadRequestException('Avaliação não encontrada!');
+    }
+
+    const sampleAvaliations = await this.sampleAvaliationService.findAllSampleLayersByAvaliationId(AvaliationId);
+
+    return {
+      avaliation,
+      sampleAvaliations
+    }
+
   }
 
-  update(id: number, updateAvaliationDto: UpdateAvaliationDto) {
-    return `This action updates a #${id} avaliation`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} avaliation`;
-  }
 }

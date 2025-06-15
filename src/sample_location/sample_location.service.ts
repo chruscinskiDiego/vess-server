@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { sampleLocationDto } from './dto/create-sample_location.dto';
-import { UpdateSampleLocationDto } from './dto/update-sample_location.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SampleLocation } from './entities/sample_location.entity';
 import { Repository } from 'typeorm';
@@ -39,6 +38,16 @@ export class SampleLocationService {
 
   }
 
+  async findSampleLocationBySampleId(sampleId: number) {
+    
+    
+    const sampleLocation = await this.sampleLocationRepository.findOneBy({
+      fk_id_sample: sampleId as any
+    });
+
+    return sampleLocation;
+  }
+
   findAll() {
     return `This action returns all sampleLocation`;
   }
@@ -47,11 +56,4 @@ export class SampleLocationService {
     return `This action returns a #${id} sampleLocation`;
   }
 
-  update(id: number, updateSampleLocationDto: UpdateSampleLocationDto) {
-    return `This action updates a #${id} sampleLocation`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} sampleLocation`;
-  }
 }

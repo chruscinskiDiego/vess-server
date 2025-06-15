@@ -10,10 +10,6 @@ export class sampleAvaliationDto {
 
     @IsNotEmpty()
     @IsNumber()
-    num_layers: number;
-
-    @IsNotEmpty()
-    @IsNumber()
     score: number;
 
     @IsNotEmpty()

@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { AvaliationService } from './avaliation.service';
 import { CreateAvaliationDto } from './dto/create-avaliation.dto';
-import { UpdateAvaliationDto } from './dto/update-avaliation.dto';
 import { AuthTokenGuard } from 'src/auth/guards/auth-token.guard';
 
 @UseGuards(AuthTokenGuard)
@@ -11,26 +10,21 @@ export class AvaliationController {
 
   @Post()
   async create(@Body() createAvaliationDto: CreateAvaliationDto) {
-    return this.avaliationService.createAvaliation(createAvaliationDto);
+    return await this.avaliationService.createAvaliation(createAvaliationDto);
   }
 
-  @Get()
-  findAll() {
-    return this.avaliationService.findAll();
+  @Get('history-by-user/:id')
+  async findAll(@Param('id', ParseIntPipe) id: number) {
+
+    return await this.avaliationService.findAvaliationHistoryByUser(id);
+    
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.avaliationService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+
+    return await this.avaliationService.findOneAvaliationById(id);
+
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAvaliationDto: UpdateAvaliationDto) {
-    return this.avaliationService.update(+id, updateAvaliationDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.avaliationService.remove(+id);
-  }
 }

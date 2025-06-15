@@ -16,8 +16,11 @@ export class SampleAvaliation {
     @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
     score: number;
 
+    @Column({ name: 'fk_id_avaliation' })
+    fk_id_avaliation: number;
+
     @ManyToOne(() => Avaliation)
     @JoinColumn({ name: 'fk_id_avaliation' })
-    fk_id_avaliation?: Avaliation;
+    avaliation?: Avaliation;
 
 }

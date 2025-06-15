@@ -13,8 +13,11 @@ export class SampleLocation {
     @Column({ type: 'varchar', length: 255, nullable: false })
     longitude: string;
 
+    @Column({ name: 'fk_id_sample' })
+    fk_id_sample: number;
+
     @OneToOne(() => SampleAvaliation, {eager: false})
     @JoinColumn({ name: 'fk_id_sample' })
-    fk_id_sample: SampleAvaliation;
+    sampleAvaliation: SampleAvaliation;
     
 }

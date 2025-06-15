@@ -1,6 +1,5 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { sampleLayerDto } from './dto/create-sample_layer.dto';
-import { UpdateSampleLayerDto } from './dto/update-sample_layer.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SampleLayer } from './entities/sample_layer.entity';
 import { Repository } from 'typeorm';
@@ -29,19 +28,14 @@ export class SampleLayersService {
 
   }
 
-  findAll() {
-    return `This action returns all sampleLayers`;
+  async findAllSampleLayersBySampleId(sampleId: number) {
+    
+    
+    const sampleLayers = await this.sampleLayerRepository.find({
+      where: {fk_id_sample: sampleId as any},
+    });
+
+    return sampleLayers;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} sampleLayer`;
-  }
-
-  update(id: number, updateSampleLayerDto: UpdateSampleLayerDto) {
-    return `This action updates a #${id} sampleLayer`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} sampleLayer`;
-  }
 }

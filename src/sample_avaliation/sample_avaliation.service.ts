@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { sampleAvaliationDto } from './dto/create-sample_avaliation.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SampleAvaliation } from './entities/sample_avaliation.entity';
@@ -29,6 +29,14 @@ export class SampleAvaliationService {
 
         const sampleId = savedSample.id_sample;
 
+        if ((sample.sample_layers.length > 5)) {
+          throw new BadRequestException('Cada amostra pode possuir no máximo 5 camadas!');
+        }
+
+        if ((sample.sample_layers.length <= 0)) {
+          throw new BadRequestException('Cada amostra pode possuir no mínimo 1 camada!');
+        }
+
         for (const layer of sample.sample_layers) {
 
           await this.sampleLayerService.createSampleLayer(layer, sampleId);
@@ -36,18 +44,39 @@ export class SampleAvaliationService {
         }
 
         await this.sampleLocationService.createSampleLocation(sample.sample_location, sampleId);
-        
+
       }
     } catch (error) {
 
-      throw new Error('Failed to create sample avaliation');
+      throw error;
 
     }
   }
 
-  findAll() {
-    return `This action returns all sampleAvaliation`;
+  async findAllSampleLayersByAvaliationId(avaliationId: number) {
+  try {
+    const samples = await this.sampleAvaliationRepository.find({
+      where: { fk_id_avaliation: avaliationId as any },
+    });
+
+    const samplesWithLayers = await Promise.all(
+      samples.map(async sample => {
+        const layers = await this.sampleLayerService.findAllSampleLayersBySampleId(sample.id_sample);
+        const location = await this.sampleLocationService.findSampleLocationBySampleId(sample.id_sample);
+
+        return {
+          ...sample,
+          layers,
+          location,
+        };
+      }),
+    );
+
+    return samplesWithLayers;
+  } catch (error) {
+    throw new Error(error);
   }
+}
 
   findOne(id: number) {
     return `This action returns a #${id} sampleAvaliation`;

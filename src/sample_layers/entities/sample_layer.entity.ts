@@ -7,13 +7,17 @@ export class SampleLayer {
     @PrimaryGeneratedColumn()
     id_layer: number;
 
-    @Column({type: 'decimal', precision: 10, scale: 2, nullable: false})
+    @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
     length: number;
 
-    @Column({type: 'decimal', precision: 10, scale: 2, nullable: false})
+    @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
     note: number;
+
+    @Column({ name: 'fk_id_sample' })
+    fk_id_sample: number;
 
     @ManyToOne(() => SampleAvaliation)
     @JoinColumn({ name: 'fk_id_sample' })
-    fk_id_sample: SampleAvaliation;
+    sampleAvaliation: SampleAvaliation;
+    
 }

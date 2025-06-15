@@ -29,6 +29,7 @@ import { S3Module } from './s3/s3.module';
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
       synchronize: true,  // apenas em dev
+      logging: true, // apenas em dev
     }),
     MongooseModule.forRoot(
       `mongodb://${process.env.MONGO_COMPOSE_USERNAME}` +

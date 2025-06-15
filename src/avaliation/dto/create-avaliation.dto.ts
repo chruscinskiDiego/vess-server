@@ -26,9 +26,6 @@ export class CreateAvaliationDto {
     @IsEmpty()
     file_link: string;
 
-    @IsDateString()
-    created_at?: Date;
-
     @IsArray()
     sample_avaliation: sampleAvaliationDto[];
 }
