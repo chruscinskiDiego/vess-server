@@ -5,7 +5,6 @@ export class AiHelperDto {
     @IsString()
     @IsNotEmpty()
     @MinLength(10)
-    @MaxLength(300)
     prompt: string;
-    
+
 }

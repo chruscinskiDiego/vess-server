@@ -8,17 +8,32 @@ export class OpenAiService {
 
     async useHelper(prompt: string) {
 
+        const finalPrompt: string = `
+        
+        `
+
         try {
+
             const response = await this.httpService.post('/chat/completions', {
                 model: 'gpt-3.5-turbo',
-                messages: [{ role: 'user', content: prompt }],
-                max_tokens: 150,
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "Você é um assistente de escrita profissional, especializado em aprimorar textos: clareza, coesão, tom e correção gramatical."
+                    },
+                    {
+                        "role": "user",
+                        "content": `Por favor, analise e melhore a mensagem abaixo, mantendo o sentido original, tornando-a mais clara e polida: ${prompt}`
+                    }
+                ],
+                "temperature": 0.7,
+                "max_tokens": 300
             }).toPromise();
 
-            const message: string =  response?.data.choices[0].message.content.trim();
+            const message: string = response?.data.choices[0].message.content.trim();
 
             return {
-                message: JSON.stringify(message)
+                message
             }
 
         } catch (err: any) {

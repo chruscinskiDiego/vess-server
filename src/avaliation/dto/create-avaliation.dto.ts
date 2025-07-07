@@ -1,6 +1,6 @@
 import { ApiExtraModels, ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsArray, IsEmpty, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsArray, IsEmpty, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 import { sampleAvaliationDto } from "src/sample_avaliation/dto/create-sample_avaliation.dto";
 
 
@@ -18,7 +18,7 @@ export class CreateAvaliationDto {
     management_decision: string;
 
     @ApiProperty({example: 'resumo...'})
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     summary: string;
 
