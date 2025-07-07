@@ -9,6 +9,8 @@ import jwtConfig from "./config/jwt.config";
 import { JwtModule } from "@nestjs/jwt";
 import { UserConfig } from "src/user_config/entities/user_config.entity";
 import { LogsModule } from "src/login_logs/login-logs.module";
+import { PassportModule } from "@nestjs/passport";
+import { GoogleStrategy } from "./google.strategy";
 
 @Global()
 @Module({
@@ -18,6 +20,7 @@ import { LogsModule } from "src/login_logs/login-logs.module";
             useClass: BcryptService,
         },
         AuthService,
+        GoogleStrategy
     ],
     controllers: [
         AuthController
@@ -31,6 +34,7 @@ import { LogsModule } from "src/login_logs/login-logs.module";
         TypeOrmModule.forFeature([UserConfig]),
         ConfigModule.forFeature(jwtConfig),
         JwtModule.registerAsync(jwtConfig.asProvider()),
+        PassportModule.register({ defaultStrategy: "jwt" }),
         AuthModule,
         LogsModule,
     ]
