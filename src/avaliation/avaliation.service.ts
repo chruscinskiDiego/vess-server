@@ -20,16 +20,16 @@ export class AvaliationService {
 
   async createAvaliation(createAvaliationDto: CreateAvaliationDto, tokenPayload: TokenPayloadDto) {
 
-    if(tokenPayload.sub !== createAvaliationDto.user_id){
+    if (tokenPayload.sub !== createAvaliationDto.user_id) {
       throw new ForbiddenException('Você não pode criar avaliações para este usuário!');
     }
 
-    const avaliationDto: any= {
+    const avaliationDto: any = {
       description: createAvaliationDto.description,
       management_decision: createAvaliationDto.management_decision,
       summary: createAvaliationDto.summary,
       infos: createAvaliationDto.infos,
-      fk_id_user: createAvaliationDto.user_id,
+      fk_user_id: createAvaliationDto.user_id,
       file_link: '',
       created_at: new Date().toISOString(),
     };
@@ -63,7 +63,7 @@ export class AvaliationService {
     }
     catch (error) {
 
-      if(error.code === '23503'){
+      if (error.code === '23503') {
         throw new BadRequestException('Usuário não encontrado');
       }
 
@@ -72,56 +72,73 @@ export class AvaliationService {
 
   }
 
-  async insertFileLinkInAvaliation (avaliationId:number, fileLink: string){
+  async insertFileLinkInAvaliation(avaliationId: number, fileLink: string) {
 
-    try{
+    try {
 
       await this.avaliationRepository
-      .createQueryBuilder()
-      .update(Avaliation)
-      .set({file_link: fileLink})
-      .where('id_avaliation = :id', {id: avaliationId})
-      .execute()
-      
-    }catch(error){
+        .createQueryBuilder()
+        .update(Avaliation)
+        .set({ file_link: fileLink })
+        .where('id_avaliation = :id', { id: avaliationId })
+        .execute()
+
+    } catch (error) {
 
       throw error;
-      
+
     }
   }
 
   async findAvaliationHistoryByUser(userId: number, tokenPayload: TokenPayloadDto) {
 
-    if(tokenPayload.sub !== userId){
+    if (tokenPayload.sub !== userId) {
       throw new ForbiddenException('Você não tem permissão para ver as avaliações do usuário!');
     }
 
     const avaliationHistory = await this.avaliationRepository
-    .createQueryBuilder()
-    .select('id_avaliation, description, summary')
-    .where('fk_user_id = :id', {id: userId})
-    .getRawMany()
+      .createQueryBuilder()
+      .select([
+        'id_avaliation',
+        'description',
+        'infos',
+        'file_link',
+        'created_at'
+      ])
+      .where('fk_user_id = :id', { id: userId })
+      .orderBy('id_avaliation', 'DESC')
+      .getRawMany();
 
     return {
       history: avaliationHistory
     }
   }
 
-  async findOneAvaliationById(AvaliationId: number, tokenPayload: TokenPayloadDto) {
-   
-    const avaliation = await this.avaliationRepository.findOneBy({
-      id_avaliation: AvaliationId
+  async findOneAvaliationById(avaliationId: number, tokenPayload: TokenPayloadDto) {
+
+    const avaliation = await this.avaliationRepository.findOne({
+      where: { id_avaliation: avaliationId },
+      select: {
+        id_avaliation: true,
+        description: true,
+        management_decision: true,
+        summary: true,
+        infos: true,
+        file_link: true,
+        created_at: true,
+        fk_user_id: true,
+      }
     });
 
-    if(!avaliation){
+    if (!avaliation) {
       throw new BadRequestException('Avaliação não encontrada!');
     }
 
-    if(tokenPayload.sub !== (avaliation.fk_id_user as unknown as number)){
+    if (tokenPayload.sub !== (avaliation.fk_user_id as unknown as number)) {
       throw new ForbiddenException('Você não tem permissão para ver a avaliação do usuário!');
     }
 
-    const sampleAvaliations = await this.sampleAvaliationService.findAllSampleLayersByAvaliationId(AvaliationId);
+    const sampleAvaliations = await this.sampleAvaliationService.findAllSampleLayersByAvaliationId(avaliationId);
 
     return {
       ...avaliation,

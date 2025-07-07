@@ -25,8 +25,13 @@ export class Avaliation {
     @Column({type: 'timestamp', nullable: false})
     created_at: Date;
 
+    @Column({ name: 'fk_user_id' })
+    fk_user_id: unknown;
+
     @ManyToOne(() => UserConfig )
     @JoinColumn({ name: 'fk_user_id' })
-    fk_id_user: UserConfig;
+    user: UserConfig;
+    
+    
     
 }

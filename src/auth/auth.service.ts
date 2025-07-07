@@ -65,9 +65,11 @@ export class AuthService {
             loginDate: new Date().toISOString()
         });
 
+        //TODO OLHAR MELHOR ESSA PARTE DO CÓDIGO
         
         return {
             accessToken,
+            userId: user.id_user,
         }
     }
 }

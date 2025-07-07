@@ -6,15 +6,36 @@ import {
   BadRequestException,
   Param,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { S3Service } from './s3.service';
+import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { DOC_IMAGE_TAG } from 'src/doc/swagger-consts';
+import { AuthTokenGuard } from 'src/auth/guards/auth-token.guard';
 
+
+@ApiTags(DOC_IMAGE_TAG)
+@UseGuards(AuthTokenGuard)
 @Controller('images')
 export class ImagesController {
   constructor(private readonly s3Service: S3Service) {}
 
-  @Post('upload/:id')
+  @ApiOperation({ summary: 'Faz upload de uma imagem' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: { 
+          type: 'string', 
+          format: 'binary',
+          description: 'Escolha um arquivo de imagem para upload',
+        },
+      },
+      required: ['file'],
+    },
+  })
   @UseInterceptors(
     FileInterceptor('file', {
       limits: { fileSize: 5 * 1024 * 1024 }, // 5mb de limite
@@ -27,7 +48,7 @@ export class ImagesController {
       },
     }),
   )
-  
+  @Post('upload/:id')
   async uploadImage(@UploadedFile() file: Express.Multer.File, @Param('id', ParseIntPipe) id: number) {
     
     if (!file) {

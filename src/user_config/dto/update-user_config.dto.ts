@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
 export class UpdateUserConfigDto {
 
@@ -8,7 +8,7 @@ export class UpdateUserConfigDto {
     @MaxLength(100)
     name: string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @MinLength(3)
     @MaxLength(255)
     password: string;

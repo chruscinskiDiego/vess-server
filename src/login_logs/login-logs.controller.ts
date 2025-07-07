@@ -3,7 +3,9 @@ import { LogsService } from "./login-logs.service";
 import { TokenPayloadParam } from "src/auth/params/token-payload.params";
 import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { AuthTokenGuard } from "src/auth/guards/auth-token.guard";
+import { ApiExcludeController } from "@nestjs/swagger";
 
+@ApiExcludeController()
 @UseGuards(AuthTokenGuard)
 @Controller('login-logs')
 export class LoginLogsController {

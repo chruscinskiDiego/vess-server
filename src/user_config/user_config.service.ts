@@ -41,41 +41,50 @@ export class UserConfigService {
         email: createdUser.email,
       }
 
-    }catch (error) {
+    } catch (error) {
 
-      if(error.code === '23505') {
-        
+      if (error.code === '23505') {
+
         throw new ConflictException('E-mail já cadastrado na base de dados.');
 
       }
-      
+
       throw error;
     }
-    
+
   }
 
 
   async findOneUserConfig(id: number) {
-    
-    const user = await this.userConfigRepository.findOneBy({ id_user: id });
+    const user = await this.userConfigRepository.findOne({
+      where: { id_user: id },
+      select: {
+        id_user: true,
+        name: true,
+        email: true,
+        country: true,
+        address: true,
+        language: true,
+      },
+    });
 
-    if(!user){
+    if (!user) {
       throw new NotFoundException(`Usuário não encontrado`);
     }
-    
+
     return user;
   }
 
   async updateUserConfig(id: number, updateUserConfigDto: UpdateUserConfigDto) {
-    
-    const userDTO = {
-        name: updateUserConfigDto.name,
-        country: updateUserConfigDto.country,
-        address: updateUserConfigDto.address,
-        language: updateUserConfigDto.language,
-      };
 
-    if(updateUserConfigDto?.password){
+    const userDTO = {
+      name: updateUserConfigDto.name,
+      country: updateUserConfigDto.country,
+      address: updateUserConfigDto.address,
+      language: updateUserConfigDto.language,
+    };
+
+    if (updateUserConfigDto?.password && updateUserConfigDto?.password !== '') {
       const passwordHash = await this.hashingService.hash(updateUserConfigDto.password);
       userDTO['password'] = passwordHash;
     }
@@ -85,23 +94,23 @@ export class UserConfigService {
       ...updateUserConfigDto,
     });
 
-    if(!user){
+    if (!user) {
       throw new NotFoundException(`Usuário não encontrado`);
     }
 
     await this.userConfigRepository.save(user);
 
     return {
-      message: `Usuário com ID ${id} atualizado com sucesso`,
+      message: `Usuário atualizado com sucesso`,
     }
 
   }
 
   async disableUserConfigByUserId(id: number) {
-    
+
     const userToDisable = await this.userConfigRepository.findOneBy({ id_user: id });
 
-    if(!userToDisable){
+    if (!userToDisable) {
       throw new NotFoundException(`Usuário não encontrado`);
     }
 

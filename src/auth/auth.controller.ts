@@ -1,13 +1,18 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { LoginDTO } from "./dto/login.dto";
+import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { DOC_AUTH_DESCRIPTION, DOC_AUTH_SUMMARY, DOC_AUTH_TAG } from "src/doc/swagger-consts";
 
+@ApiTags(DOC_AUTH_TAG)
 @Controller('auth')
 export class AuthController {
 
     constructor(private readonly authService: AuthService) {}
 
-
+    @ApiBody({description: DOC_AUTH_DESCRIPTION, type: LoginDTO})
+    @ApiOperation({summary: DOC_AUTH_SUMMARY})
+    @HttpCode(HttpStatus.OK)
     @Post('login')
     login(@Body() loginDTO: LoginDTO){
 
