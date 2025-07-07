@@ -11,6 +11,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { LogsModule } from './login_logs/login-logs.module';
 import { S3Module } from './s3/s3.module';
+import { OpenAiModule } from './open-ai/open-ai.module';
 
 @Module({
   imports: [
@@ -44,7 +45,8 @@ import { S3Module } from './s3/s3.module';
     SampleLayersModule,
     SampleLocationModule,
     LogsModule,
-    S3Module
+    S3Module,
+    OpenAiModule
   ],
   controllers: [AppController],
   providers: [AppService],
