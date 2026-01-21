@@ -11,38 +11,44 @@
 [![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat&logo=githubactions&logoColor=white)](https://github.com/features/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-## 📖 Sobre
+## 📖 About
 
-O **VESS-SERVER** é uma API desenvolvida com [NestJS](https://nestjs.com) para a disciplina **Programação Web Avançada** da UTFPR. Seu principal objetivo é gerenciar os cadastros e operações necessárias para o cálculo do método VESS, fornecendo endpoints REST, autenticação segura e integrações com diversos serviços externos.
-
-## ✨ Tecnologias
-
-- **Framework:** NestJS
-- **Linguagem:** TypeScript
-- **Banco de Dados:** MongoDB e PostgreSQL
-- **Documentação:** Swagger (OpenAPI)
-- **Integrações:**
-  - OpenAI (ChatGPT)
-  - Amazon S3 (Uploads de arquivos)
-- **Autenticação:** JWT Bearer Token e Google OAuth2
-- **CI/CD:** GitHub Actions
-
-## 🚀 Funcionalidades Principais
-
-- Cadastro e autenticação de usuários (JWT + Google OAuth2)
-    
-- Gerenciamento de recursos do método VESS
-    
-- Upload e gestão de arquivos via Amazon S3
-    
-- Integração com OpenAI para auxílio de IA ao gerar descrições
-    
-- Documentação automática com Swagger
-    
-- Pipelines de CI/CD com GitHub Actions
-    
-
+**VESS-SERVER** is an API built with [NestJS](https://nestjs.com) for the **Advanced Web Programming** course at UTFPR.  
+Its main goal is to manage the registrations and operations required to calculate the **VESS method**, providing REST endpoints, secure authentication, and integrations with external services.
 
 ---
 
-_Desenvolvido por Diego Chruscinski de Souza para a disciplina Programação Web Avançada da UTFPR._
+## Overview
+
+<p align="center">
+  <img src="./docs/overview.png" alt="VESS Server diagram" width="1000" />
+</p>
+
+---
+
+## ✨ Tech stack
+
+- **Framework:** NestJS
+- **Language:** TypeScript
+- **Databases:** MongoDB and PostgreSQL
+- **API Documentation:** Swagger (OpenAPI)
+- **Integrations:**
+  - OpenAI (ChatGPT)
+  - Amazon S3 (file uploads)
+- **Authentication:** JWT Bearer Token + Google OAuth2
+- **CI/CD:** GitHub Actions
+
+---
+
+## 🚀 Key features
+
+- User registration and authentication (**JWT + Google OAuth2**)
+- VESS method resources management (CRUD and business rules)
+- File upload and management via **Amazon S3**
+- **OpenAI** integration to assist with AI-generated descriptions
+- Auto-generated API docs with **Swagger**
+- CI/CD pipelines with **GitHub Actions**
+
+---
+
+_Developed by Diego Chruscinski de Souza for the Advanced Web Programming course at UTFPR._
