@@ -9,7 +9,6 @@
 [![Amazon S3](https://img.shields.io/badge/Amazon%20S3-FF9900?style=flat&logo=amazons3&logoColor=white)](https://aws.amazon.com/s3/)
 [![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=flat&logo=openai&logoColor=white)](https://openai.com)
 [![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat&logo=githubactions&logoColor=white)](https://github.com/features/actions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ## 📖 About
 
@@ -52,3 +51,39 @@ Its main goal is to manage the registrations and operations required to calculat
 ---
 
 _Developed by Diego Chruscinski de Souza for the Advanced Web Programming course at UTFPR._
+
+---
+
+## Local setup
+
+Requirements: Node.js, npm, Docker Compose, PostgreSQL and MongoDB. Google OAuth, S3 uploads and AI assistance also require credentials for their respective providers.
+
+```bash
+npm ci
+cp .env.example .env
+# Fill provider credentials and set local database passwords.
+docker compose up -d
+npm run start:dev
+```
+
+Database connection settings must match the Compose settings. The current MongoDB connection is assembled for localhost using MONGO_COMPOSE_* variables.
+
+Swagger is served at /doc; the default application port is 3000. The frontend origin is configured as http://localhost:5173 in src/main.ts.
+
+## Configuration notes
+
+- JWT settings are read by the authentication configuration.
+- Google OAuth needs a client ID, client secret and callback URL.
+- S3 requires a region, bucket and credentials permitted to upload to that bucket.
+- AI assistance uses the HTTP client configured in src/open-ai; verify the provider configuration and model availability before enabling it.
+- TypeORM synchronize is enabled in the development configuration. Review it before deploying against persistent data.
+- The MongoDB Compose service has an invalid TZ value that should be corrected before use.
+
+## Available checks
+
+```bash
+npm run build
+npm test
+```
+
+Tests that initialize application modules require the corresponding dependencies. The repository contains default NestJS tests and does not assert comprehensive coverage of the integrations. There is no LICENSE file in the repository.
